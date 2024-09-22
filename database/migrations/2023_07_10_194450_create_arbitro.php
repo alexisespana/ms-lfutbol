@@ -17,7 +17,6 @@ class CreateArbitro extends Migration
             $table->id();
             $table->string('nombre');
             $table->string('apellidos');
-
             $table->timestamps();
         });
     }

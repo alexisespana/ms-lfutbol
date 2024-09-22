@@ -18,11 +18,11 @@ class CreateJugadores extends Migration
             $table->string('nombre');
             $table->string('apellidos');
             $table->string('cedula')->unique();
-            $table->string('equipo');
             $table->string('posicion');
             $table->date('fecha_nacimiento');
             $table->string('telefono');
             $table->string('direccion');
+            $table->string('imagen');
             $table->timestamps();
         });
     }

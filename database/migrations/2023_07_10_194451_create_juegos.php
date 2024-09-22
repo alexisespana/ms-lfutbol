@@ -15,6 +15,9 @@ class CreateJuegos extends Migration
     {
         Schema::create('juegos', function (Blueprint $table) {
             $table->id();
+            $table->integer('status');
+            $table->unsignedBigInteger('id_jornada');
+            $table->unsignedBigInteger('id_categoria');
             $table->unsignedBigInteger('equipo_local');
             $table->unsignedBigInteger('equipo_visitante');
             $table->string('fecha');
@@ -23,6 +26,8 @@ class CreateJuegos extends Migration
             $table->unsignedBigInteger('arbitro');
             $table->timestamps();
 
+            $table->foreign('id_jornada')->references('id')->on('jornada');
+            $table->foreign('id_categoria')->references('id')->on('categoria');
             $table->foreign('sede')->references('id')->on('sede');
             $table->foreign('arbitro')->references('id')->on('arbitro');
             $table->foreign('equipo_local')->references('id')->on('equipos');

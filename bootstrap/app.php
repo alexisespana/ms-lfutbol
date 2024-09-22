@@ -49,6 +49,11 @@ $app->singleton(
     App\Console\Kernel::class
 );
 
+$app->middleware([
+    App\Http\Middleware\CorsMiddleware::class
+ ]);
+
+
 /*
 |--------------------------------------------------------------------------
 | Register Config Files
@@ -79,7 +84,7 @@ $app->configure('app');
 
 // $app->routeMiddleware([
 //     'auth' => App\Http\Middleware\Authenticate::class,
-// ]);
+// ]);IdeHelperServiceProvider
 
 /*
 |--------------------------------------------------------------------------
