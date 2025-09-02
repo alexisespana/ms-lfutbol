@@ -18,6 +18,8 @@ class Categoria extends Migration
             $table->string('nombre');
             $table->string('alias');
             $table->integer('vigente')->default(1);
+            $table->integer('grupos')->default(0);
+            $table->integer('cant_grupos')->default(0);
             $table->timestamps();
             
         });

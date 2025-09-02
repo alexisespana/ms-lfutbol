@@ -17,6 +17,7 @@ class CreateSede extends Migration
             $table->id();
             $table->string('nombre');
             $table->string('direccion');
+            $table->integer('status')->default(1);
             $table->timestamps();
         });
     }

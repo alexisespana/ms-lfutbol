@@ -17,7 +17,7 @@ class SedeSeeder extends Seeder
     {
         //
         $faker = Faker::create();
-        foreach (range(1, 2) as $index) {
+        foreach (range(1, 7) as $index) {
             DB::table('sede')->insert([
                 'nombre' => $faker->name,
                 'direccion' => $faker->address,

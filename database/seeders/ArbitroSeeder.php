@@ -17,7 +17,7 @@ class ArbitroSeeder extends Seeder
     public function run()
     {
         $faker = Faker::create();
-        foreach (range(1, 4) as $index) {
+        foreach (range(1, 7) as $index) {
             DB::table('arbitro')->insert([
                 'nombre' => $faker->name,
                 'apellidos' => $faker->lastName(),

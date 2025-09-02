@@ -4,31 +4,37 @@ namespace App\Models\Posiciones;
 
 use App\Models\Categoria\Categoria;
 use App\Models\Equipos\Equipos;
+use App\Models\Grupos\Grupos_Categorias;
+use App\Models\Jornada\JornadaCategoria;
 use Illuminate\Database\Eloquent\Model;
 
 class Posiciones extends Model
 {
     protected $table = 'posiciones';
     protected $primaryKey = 'id';
-    public $timestamps = false;
+    public $timestamps = true;
     protected $fillable = [
-       'posiciones',
+       'posicion',
        'id_equipo',
-       'id_categoria',
+       'idgrupo_categoria',
+       'id_jornada',
        'jugados',
        'ganados',
-       'empates',
+       'empate',
        'perdidos',
        'goles_favor',
        'goles_contra',
-       'diff_goles',
+       'dif_goles',
        'puntos',
 
     ];
     public function equipos() {
         return $this->hasOne(Equipos::class, 'id', 'id_equipo');
     }
-    public function categoria() {
-        return $this->hasOne(Categoria::class, 'id', 'id_categoria');
+    public function idgrupo_categoria() {
+        return $this->hasOne(Grupos_Categorias::class, 'id', 'idgrupo_categoria');
+    }
+    public function jornada_categoria() {
+        return $this->hasOne(JornadaCategoria::class, 'id', 'id_jornada');
     }
 }

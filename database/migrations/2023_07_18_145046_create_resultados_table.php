@@ -16,10 +16,13 @@ class CreateResultadosTable extends Migration
         Schema::create('resultados', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('id_juego');
-            $table->integer('goles_local');
-            $table->integer('goles_visitante');
+            $table->unsignedBigInteger('status');
+            $table->string('cant_goles_eqlocal')->nullable();
+            $table->string('cant_goles_eqvisit')->nullable();
+
             $table->timestamps();
             $table->foreign('id_juego')->references('id')->on('juegos');
+            $table->foreign('status')->references('id')->on('cod_tipo');
         });
     }
 

@@ -23,7 +23,7 @@ class CreateEstadisticasJugador extends Migration
             $table->integer('cambio')->nullable();
             $table->integer('tarjetas_amarilla')->nullable();
             $table->integer('tarjetas_roja')->nullable();
-            $table->integer('año')->nullable();
+            // $table->integer('año')->nullable();
             $table->timestamps();
             $table->foreign('equipo_id')->references('id')->on('equipos');
             $table->foreign('jugador_id')->references('id')->on('jugadores');

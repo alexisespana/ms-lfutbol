@@ -2,8 +2,10 @@
 
 namespace Database\Seeders;
 
+use App\Models\Menu\Menu;
 use App\Models\Roles\Roles;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class RolesSeeder extends Seeder
 {
@@ -15,8 +17,7 @@ class RolesSeeder extends Seeder
     public function run()
     {
         $json = [
-            "Administador",
-            "Vendedor",
+            "Administrador",
 
 
         ];
@@ -30,24 +31,24 @@ class RolesSeeder extends Seeder
 
 
 
-          $rol=  Roles::insertGetId([
+            $rol =  Roles::insertGetId([
                 'nombre' => $value,
-                'descripcion' => 'creado',
+                'descripcion' => 'administrador del sistema, el cual tendrá control total de todos los Módulos del Sistema.',
             ]);
 
-            // foreach (Menu::all() as $key => $menu) {
-            //     # code...
-                
-                
-                
-                
-            //     DB::table('user_role')
-            //     ->insert([
-            //         'user_id' => $menu->id,
-            //         'role_id' => $rol,
+            if(Roles::where('id', $rol)->pluck('nombre')->first()== 'Administrador'){
+
+                foreach (Menu::all() as $key => $menu) {
                     
-            //     ]);
-            // } 
+                    
+                    DB::table('role_menu')
+                    ->insert([
+                        'role_id' => $rol,
+                        'menu_id' => $menu->id,
+                        
+                    ]);
+                }
+            }
         }
     }
 }

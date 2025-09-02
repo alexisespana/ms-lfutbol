@@ -1,17 +1,18 @@
 <?php
 
-namespace App\Models\Estadisticas_Juego;
+namespace App\Models\Resultados;
 
 use App\Models\Jugadores\Jugadores;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Log;
 
-class Estadisticas_juegos extends Model
+class EstadisticasResultados extends Model
 {
-    protected $table = 'estadisticas_juegos';
+    protected $table = 'estadisticas_resultados';
     protected $primaryKey = 'id';
-    public $timestamps = false;
+    public $timestamps = true;
     protected $fillable = [
-        'juego_id',
+        'resultado_id',
         'titulares_eq_local',
         'suplentes_eq_local',
         'cambio_entra_eq_local',
@@ -40,7 +41,9 @@ class Estadisticas_juegos extends Model
 
     ];
 
-    public function jugadores_eq_local(){
-        return $this->belongsTo(Jugadores::class, 'titulares_eq_local','id');
+    public function titulares_eq_local(){
+
+      
     }
+
 }

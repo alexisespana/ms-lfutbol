@@ -2,135 +2,57 @@
 
 namespace App\Http\Controllers\Traits\EstadisticasResultadosTrait;
 
+use App\Models\Resultados\EstadisticasResultados;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 trait EstadisticasResultadosTrait
 {
-    function EstadisticasResultadosEquipoLocal($JugEqlocalAll, $TitularesEqLocal, $SuplentesEqLocal, $GolsJugEqLocal, $MinGolesEqLocal, $CambSalenEqLocal, $CambEntranEqLocal, $MinCambioEqLocal, $tarjAmaEqLocal, $MinTarjAmaEqLocal, $tarjRojaEqLocal, $MinTarjRojaEqLocal)
+    function EstadisticasResultadosJuegos($resultado_id, $resultados)
     {
 
-        foreach ($JugEqlocalAll as $keyjug => $jug) {
-            //----------------------- PARA EXTRAER TODOS LOS GOLES DEL EQUIPO LOCAL -----------------------
-            $golesEncont[] = [];
-            if (count($GolsJugEqLocal) > 0) {
-                foreach ($GolsJugEqLocal as $keygol => $gol) {
-                    if (!array_key_exists($gol, $golesEncont)) {
-                        $golesEncont[$gol] = [];
-                    }
+        try {
 
-                    if ($gol == $jug) {
-                        foreach ($TitularesEqLocal as $key => $titu) {
-                            if ($titu->id == $gol) {
-                                array_push($golesEncont[$gol],  $MinGolesEqLocal[$keygol]);
-                            }
-                        }
-                        foreach ($SuplentesEqLocal as $key => $titu) {
-                            if ($titu->id == $gol) {
-                                array_push($golesEncont[$gol],  $MinGolesEqLocal[$keygol]);
-                            }
-                        }
-                    }
-                }
-            }
+            $suplentes_eq_local = '';
 
-            //----------------------- PARA EXTRAER TODOS LOS JUGADORES QUE SALEN DEL EQUIPO LOCAL -----------------------
-            // dd($TitularesEqLocal,$CambSalenEqLocal,$MinCambioEqLocal);
-            $cambiosSalen[] = [];
-            if (isset($CambSalenEqLocal)) {
-                foreach ($CambSalenEqLocal as $keySalen => $Csalen) {
-                    $cambiosSalen[] = [];
-                    if (!array_key_exists($Csalen, $cambiosSalen)) {
-                        $cambiosSalen[$Csalen] = [];
-                    }
-                    if ($Csalen == $jug) {
-                        foreach ($TitularesEqLocal as $key => $titu) {
-                            if ($titu->id == $Csalen) {
-                                array_push($cambiosSalen[$Csalen],  $MinCambioEqLocal[$keySalen]);
-                            }
-                        }
-                    }
-                }
-            }
-            //----------------------- PARA EXTRAER TODOS LOS JUGADORES QUE ENTRAN DEL EQUIPO LOCAL -----------------------
+            $JugadorTitulares = new EstadisticasResultados;
 
-            $cambiosEntran[] = [];
-            if (isset($CambEntranEqLocal)) {
-                foreach ($CambEntranEqLocal as $keySalen => $Csalen) {
-                    if (!array_key_exists($Csalen, $cambiosEntran)) {
-                        $cambiosEntran[$Csalen] = [];
-                    }
-                    if ($Csalen == $jug) {
+            $JugadorTitulares->resultado_id = $resultado_id;
+            $JugadorTitulares->titulares_eq_local = collect($resultados['titulares_equipo_local'])->implode(',');
+            $JugadorTitulares->suplentes_eq_local = $suplentes_eq_local;
+            $JugadorTitulares->suplentes_eq_local = null;
+            $JugadorTitulares->cambio_entra_eq_local = collect($resultados['entra_eq_local'])->implode(',');
+            $JugadorTitulares->cambio_sale_eq_local = collect($resultados['sale_eq_local'])->implode(',');
+            $JugadorTitulares->min_cambio_eq_local = collect($resultados['min_cambio_eq_local'])->implode(',');
+            $JugadorTitulares->goles_eq_local = collect($resultados['goles_eq_local'])->implode(',');;
+            $JugadorTitulares->min_goles_eq_local = collect($resultados['min_goles_eqlocal'])->implode(',');
+            $JugadorTitulares->tarjeta_ama_eq_local = collect($resultados['tarjetas_eq_local'])->implode(',');
+            $JugadorTitulares->min_ama_eq_local = collect($resultados['min_tarjetas_eq_local'])->implode(',');
+            $JugadorTitulares->tarjeta_roja_eq_local = null;
+            $JugadorTitulares->min_roja_eq_local = null;
+            $JugadorTitulares->titulares_eq_visit = collect($resultados['titulares_equipo_visit'])->implode(',');
+            $JugadorTitulares->suplentes_eq_visit = null;
+            $JugadorTitulares->cambio_entra_eq_visit = collect($resultados['entra_eq_visit'])->implode(',');
+            $JugadorTitulares->cambio_sale_eq_visit = collect($resultados['sale_eq_visit'])->implode(',');
+            $JugadorTitulares->min_cambio_eq_visit = collect($resultados['min_cambio_eq_visit'])->implode(',');
+            $JugadorTitulares->goles_eq_visit = collect($resultados['goles_eq_visit'])->implode(',');
+            $JugadorTitulares->min_goles_eq_visit = collect($resultados['min_goles_eqvisit'])->implode(',');
+            $JugadorTitulares->tarjeta_ama_eq_visit = collect($resultados['tarjetas_eq_visit'])->implode(',');
+            $JugadorTitulares->min_ama_eq_visit = collect($resultados['min_tarjetas_eq_visit'])->implode(',');
+            $JugadorTitulares->tarjeta_roja_eq_visit = null;
+            $JugadorTitulares->min_roja_eq_visit = null;
 
-                        foreach ($SuplentesEqLocal as $key => $titu) {
-                            if ($titu->id == $Csalen) {
-                                array_push($cambiosEntran[$Csalen],  $MinCambioEqLocal[$keySalen]);
-                            }
-                        }
-                    }
-                }
-            }
+            $JugadorTitulares->save();
+        } catch (\Exception $e) {
 
-            //----------------------- PARA EXTRAER TODAS LAS AMARILLAS DE LOS JUGADORES EN EL EQUIPO LOCAL -----------------------
-            $amaEncontradas[] = [];
-            if (isset($tarjAmaEqLocal)) {
 
-                foreach ($tarjAmaEqLocal as $keyAma => $ama) {
-                    if (!array_key_exists($ama, $amaEncontradas)) {
-                        $amaEncontradas[$ama] = [];
-                    }
+            DB::rollBack();
+            Log::error('Ha ocurrido un error en EstadisticasResltadosTRaits ====>
+        ' . $e);
+            $message = 'Ha ocurrido un error al insertar la estadisticas del resultados!';
+            $status = 500;
 
-                    if ($ama == $jug) {
-                        foreach ($TitularesEqLocal as $key => $titu) {
-                            if ($titu->id == $ama) {
-                                array_push($amaEncontradas[$ama],  $MinTarjAmaEqLocal[$keyAma]);
-                            }
-                        }
-                        foreach ($SuplentesEqLocal as $key => $titu) {
-                            if ($titu->id == $ama) {
-                                array_push($amaEncontradas[$ama],  $MinTarjAmaEqLocal[$keyAma]);
-                            }
-                        }
-                    }
-                }
-            }
-              //----------------------- PARA EXTRAER TODAS LAS AMARILLAS DE LOS JUGADORES EN EL EQUIPO LOCAL -----------------------
-              $rojaEncontradas[] = [];
-              if (isset($tarjRojaEqLocal)) {
-  
-                  foreach ($tarjRojaEqLocal as $keyRoja => $roja) {
-                      if (!array_key_exists($roja, $rojaEncontradas)) {
-                          $rojaEncontradas[$roja] = [];
-                      }
-  
-                      if ($roja == $jug) {
-                          foreach ($TitularesEqLocal as $key => $titu) {
-                              if ($titu->id == $roja) {
-                                  array_push($rojaEncontradas[$roja],  $MinTarjRojaEqLocal[$keyRoja]);
-                              }
-                          }
-                          foreach ($SuplentesEqLocal as $key => $titu) {
-                              if ($titu->id == $roja) {
-                                  array_push($rojaEncontradas[$roja],  $MinTarjRojaEqLocal[$keyRoja]);
-                              }
-                          }
-                      }
-                  }
-              }
-
-            
+            return response()->json(['message' => $message, 'status' => $status]);
         }
-
-        // dd(array_filter($golesEncont));
-
-
-        $EstadEqLocal = [
-            'goles' => array_filter($golesEncont),
-            'cambiosSalen' => array_filter($cambiosSalen),
-            'cambiosEntran' => array_filter($cambiosEntran),
-            'amarillas' => array_filter($amaEncontradas),
-            'rojas' => array_filter($rojaEncontradas),
-        ];
-        // dd($EstadEqLocal);
-
-        return $EstadEqLocal;
     }
 }

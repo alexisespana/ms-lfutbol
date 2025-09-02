@@ -22,30 +22,46 @@ class MenuSeeder extends Seeder
                 "icono" => "home",
                 "orden" => "1"
             ],
-            [
-                "nombre" => "Equipos",
-                "icono" => "view_list",
-                "orden" => "2"
-            ],
+           
             [
                 "nombre" => "Categorias",
                 "icono" => "equalizer",
+                "orden" => "2"
+            ],
+            [
+                "nombre" => "Grupos",
+                "icono" => "fas fa-layer-group",
                 "orden" => "3"
             ],
             [
-                "nombre" => "Resultados",
-                "icono" => "brightness_high",
+                "nombre" => "Equipos",
+                "icono" => "view_list",
                 "orden" => "4"
+            ],
+            [
+                "nombre" => "Juegos",
+                "icono" => "view_list",
+                "orden" => "5"
+            ],
+            [
+                "nombre" => "Resultados",
+                "icono" => "fas fa-futbol",
+                "orden" => "6"
+            ],
+            [
+                "nombre" => "Posiciones",
+                "icono" => "fas fa-futbol",
+                "orden" => "7"
             ],
             [
                 "nombre" => "Jugadores",
                 "icono" => "swap_horiz",
-                "orden" => "5"
+                "orden" => "8"
             ],
             [
                 "nombre" => "Jornadas",
                 "icono" => "swap_horiz",
-                "orden" => "6"
+                "orden" => "9"
             ],
 
         ];
@@ -58,25 +74,54 @@ class MenuSeeder extends Seeder
                 "orden" => "1"
             ],
 
+          
             [
                 "tipo" => "2",
-                "nombre" => "Lista de Equipos",
-                "href" => "/Cajas/Lista",
+                "nombre" => "Lista de Categorias",
+                "href" => "/Categorias/Lista",
                 "id_menupadre" => "2",
                 "orden" => "1"
             ],
             [
                 "tipo" => "2",
-                "nombre" => "Lista de Categorias",
-                "href" => "/Ventas/registrar",
+                "nombre" => "Lista de grupos",
+                "href" => "/Grupos/Lista",
                 "id_menupadre" => "3",
                 "orden" => "1"
             ],
             [
                 "tipo" => "2",
-                "nombre" => "Resultados Juegos",
-                "href" => "/Gastos/Registrar",
+                "nombre" => "Lista de Equipos",
+                "href" => "/Equipos/Lista",
                 "id_menupadre" => "4",
+                "orden" => "1"
+            ],
+            [
+                "tipo" => "2",
+                "nombre" => "Lista de Juegos",
+                "href" => "/Juegos/Lista",
+                "id_menupadre" => "5",
+                "orden" => "2"
+            ],
+            [
+                "tipo" => "2",
+                "nombre" => "Crear Juegos",
+                "href" => "/Juegos/Crear",
+                "id_menupadre" => "5",
+                "orden" => "1"
+            ],
+            [
+                "tipo" => "2",
+                "nombre" => "Resultados Juegos",
+                "href" => "/Resultados/Juegos",
+                "id_menupadre" => "6",
+                "orden" => "1"
+            ],
+            [
+                "tipo" => "2",
+                "nombre" => "Tabla de Posiciones",
+                "href" => "/Posiciones/Tabla",
+                "id_menupadre" => "7",
                 "orden" => "1"
             ],
 
@@ -84,15 +129,15 @@ class MenuSeeder extends Seeder
             [
                 "tipo" => "2",
                 "nombre" => "Lista de Jugadores",
-                "href" => "/Gastos/Registrar",
-                "id_menupadre" => "5",
+                "href" => "/Jugadores/Lista",
+                "id_menupadre" => "8",
                 "orden" => "1"
             ],
             [
                 "tipo" => "2",
                 "nombre" => "Lista Jornadas",
-                "href" => "/Gastos/Registrar",
-                "id_menupadre" => "6",
+                "href" => "/Jornadas/Lista",
+                "id_menupadre" => "9",
                 "orden" => "1"
             ],
         ];

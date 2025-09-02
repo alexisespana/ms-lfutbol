@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Equipos;
 use App\Http\Controllers\Controller;
 use App\Models\Categoria\Categoria;
 use App\Models\Equipos\Equipos;
+use App\Models\Jugadores\JugadoresEquipos;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -21,7 +22,7 @@ class EquiposController extends Controller
             ->when(isset($request->id_equipo), function ($q) use ($request) {
                 return $q->where('id',  $request->id_equipo);
             })
-            ->orderBy('id', 'desc')->get();
+            ->orderBy('nombre', 'asc')->get();
         return $equipos;
     }
     public function CrearEquipos(Request $request)
@@ -49,7 +50,7 @@ class EquiposController extends Controller
                     ]);
                 }
             }
-            $message = 'La Equipo se ha Creado exitosamente..!';
+            $message = 'El Equipo se ha Creado exitosamente..!';
         } catch (\Exception $e) {
 
 
@@ -106,6 +107,51 @@ class EquiposController extends Controller
             DB::rollBack();
             Log::error('Ha ocurrido un error al editar el Equipo ====> ' . $e);
             $message = 'Ha ocurrido un error al editar el Equipo!';
+            $status = 500;
+
+
+            return response()->json(['message' => $message, 'status' => $status], 500);
+        }
+
+        DB::commit();
+        $status = 200;
+
+        return response()->json(['message' => $message, 'status' => $status]);
+    }
+    function registrarJugadoresEquipos(Request $request)
+    {
+        try {
+
+            // return $request->all
+            foreach ($request->id_categoria as $key => $value) {
+                // EN CASO DE QUE NO SE AGREGRE NINUNG JUGADOR PARA EL EQUIPO EN UNA CATEGORIA
+                if ($request->jugadores[$key] != null) {
+
+
+                    foreach ($request->jugadores[$key] as $keys => $jugadores) {
+
+                        $jugador =  JugadoresEquipos::where([['jugador_id', $jugadores], ['equipo_id', $request->equipo_id], ['categoria_id', $value]])->count();
+                        if ($jugador < 1) {
+
+
+                            $JugadoresEquipos = new JugadoresEquipos;
+
+                            $JugadoresEquipos->jugador_id = $jugadores;
+                            $JugadoresEquipos->equipo_id = $request->equipo_id;
+                            $JugadoresEquipos->categoria_id = $value;
+
+                            $JugadoresEquipos->save();
+                        }
+                    }
+                }
+            }
+            $message = 'Se han agregados todos los jugadores al equipos, en las categoria seleccionadas';
+        } catch (\Exception $e) {
+
+
+            DB::rollBack();
+            Log::error('Ha ocurrido un error al crear los jugadores de los equipos ====> ' . $e);
+            $message = 'Ha ocurrido un error al crear los jugadores de los equipos!';
             $status = 500;
 
 

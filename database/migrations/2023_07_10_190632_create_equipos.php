@@ -15,6 +15,7 @@ class CreateEquipos extends Migration
     {
         Schema::create('equipos', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('temporada_id');
             $table->string('nombre');
             $table->string('abr');
             $table->string('descripcion');
@@ -25,6 +26,9 @@ class CreateEquipos extends Migration
             $table->string('telefono')->nullable();
 
             $table->timestamps();
+
+            $table->foreign('temporada_id')->references('id')->on('temporada');
+            
         });
     }
 

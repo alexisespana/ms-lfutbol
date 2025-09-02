@@ -3,66 +3,55 @@
 namespace App\Http\Controllers\Posiciones;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Traits\CategoriasTraits\CategoriasTraits;
 use App\Models\Categoria\Categoria;
 use App\Models\Equipos\Equipos;
+use App\Models\Jornada\Jornada;
 use App\Models\Posiciones\Posiciones;
 use App\Models\Resultados\Resultados;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class PosicionesController extends Controller
 {
+    use CategoriasTraits;
 
     public function Posiciones()
     {
-        // $resultado = Categoria::with(['equipos'])->where('id',1)->get();
-        // dd($resultado[0]->equipos);
+        $categorias = $this->Categoria(null);
 
-        // foreach ($resultado as $key => $eq) {
-        //     foreach ($eq->equipos as $key1 => $equipos) {
-        //         dd($equipos->id, $eq->id);
-        //     }
-        // }
-        $Categoria = Categoria::all();
+        $fecha_activa = Jornada::where('status', 3)->orderByDesc('id')
+            ->first();
 
-        $data = Posiciones::with(['equipos.categoria'])->orderBy('posicion')->get();
-        // dd($data);
+        if (!isset($fecha_activa)) {
+            $fecha_activa = Jornada::where('status', 1)->orderByDesc('id')->first();
+            if (is_null($fecha_activa)) {
 
-        
-        $beneficiosAg = [];
-
-        foreach ($data as $key => $benf) {
-            //Recorremos los datos del array y si no es null agrupamos por anio
-            if (!is_null($data[$key])) {
-
-                // dd( $benf->id_categoria);
-
-                $anioBenef = $benf->id_categoria;
-                $beneficiosAg[$anioBenef][] = $benf;
+                $fecha_activa = Jornada::where('status', 2)->orderByDesc('id')->first();
             }
         }
 
-        // dd($beneficiosAg);
+        // return $fecha_activa;
 
-        // AQUI LIMPIAMOS EL ARRAY DATA DE TODOS LOS VALORES QUE VENGAN NULL
+        $posiciones = Posiciones::with(['equipos', 'jornada_categoria.jornada', 'idgrupo_categoria.grupos', 'idgrupo_categoria.categorias'])
+            ->whereHas('jornada_categoria.jornada', function ($query) use ($fecha_activa) {
+                return $query->where('id_jornada', $fecha_activa->id);
+            })
+            ->orderBy('posicion')->get();
 
-        $posiciones = [];
-        //  SI EL ARRAY TIENE ALGUN BENEFICIO LO RECORREMOS PARA CONTAR LA CANTIDAD DE CADA BENEFICIO POR AÑO
-      
-            foreach ($beneficiosAg as $key => $value) {
-                
-                $posiciones[] = (object)[
-                    'categoria' => $key,
-                    'cantidad_equipos' => count($value),
-                    'equipos' => $value,
-                ];
-            }
-        
-        // dd($posiciones);
+        // SI NO ESTA LA TABLA DE POSICIONES PARA LA FECHA ACTIVA ENTONCES SE MUESTRA LAS POSICIONES DE LA ULTIMA FECHA JUGADA
 
-        return
-            [
-                'data' => $posiciones,
-                'categoria' => $Categoria
-            ];
+        return ['posiciones' => $posiciones, 'categorias' => $categorias];
+    }
+    public function Posiciones_Jornada(Request $request)
+    {
+
+        // return $request->all();
+
+
+        $posiciones = Posiciones::with(['equipos', 'idgrupo_categoria.grupos', 'idgrupo_categoria.categorias'])
+            ->where([['id_jornada', $request->id_jornada], ['idgrupo_categoria', $request->id_categoria]])
+            ->orderBy('posicion')->get();
+        return ['posiciones' => $posiciones];
     }
 }

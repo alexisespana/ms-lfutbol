@@ -15,10 +15,12 @@ class CreateJugadoresEquipos extends Migration
     {
         Schema::create('jugadores_equipos', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('equipo_id');
             $table->unsignedBigInteger('jugador_id');
-            $table->foreign('equipo_id')->references('id')->on('equipos');
+            $table->unsignedBigInteger('equipo_id');
+            $table->unsignedBigInteger('categoria_id');
             $table->foreign('jugador_id')->references('id')->on('jugadores');
+            $table->foreign('equipo_id')->references('id')->on('equipos');
+            $table->foreign('categoria_id')->references('id')->on('categoria');
         });
     }
 

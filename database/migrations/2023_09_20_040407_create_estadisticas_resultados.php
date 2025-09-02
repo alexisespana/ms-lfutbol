@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateEstadisticasJuegos extends Migration
+class CreateEstadisticasResultados extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class CreateEstadisticasJuegos extends Migration
      */
     public function up()
     {
-        Schema::create('estadisticas_juegos', function (Blueprint $table) {
+        Schema::create('estadisticas_resultados', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('juego_id');
+            $table->unsignedBigInteger('resultado_id')->unique();
             $table->string('titulares_eq_local')->nullable();
             $table->string('suplentes_eq_local')->nullable();
             $table->string('cambio_entra_eq_local')->nullable();
@@ -40,7 +40,7 @@ class CreateEstadisticasJuegos extends Migration
             $table->string('min_roja_eq_visit')->nullable();
             $table->timestamps();
 
-            $table->foreign('juego_id')->references('id')->on('juegos');
+            $table->foreign('resultado_id')->references('id')->on('resultados');
         });
     }
 
@@ -51,6 +51,6 @@ class CreateEstadisticasJuegos extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('estadisticas_juegos');
+        Schema::dropIfExists('estadisticas_resultados');
     }
 }

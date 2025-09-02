@@ -9,10 +9,5 @@ class Arbitro extends Model
     protected $table = 'arbitro';
     protected $primaryKey = 'id';
     public $timestamps = false;
-    protected $fillable = [
-        'nombre',
-        'apellidos',
-        
-    ];
-
+    protected $fillable = ['nombre', 'apellidos', 'status'];
 }
